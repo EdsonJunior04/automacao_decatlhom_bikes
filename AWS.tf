@@ -39,11 +39,10 @@ resource "aws_instance" "ec2_instance_linux2" {
   vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
 
 
-
   key_name = "MinhaChaveEdson"
 
   user_data = <<-EOF
-             #!/bin/bash
+              #!/bin/bash
               yum update -y
               yum install -y apache2 git -y
               sudo systemctl enable apache2
@@ -107,5 +106,9 @@ output "public_ip_1" {
 
 output "public_ip_2" {
   value = aws_instance.ec2_instance_linux2.public_ip
+}
+
+output "name" {
+  value = aws_efs_file_system.decatlhombikescompa.id
 }
 
