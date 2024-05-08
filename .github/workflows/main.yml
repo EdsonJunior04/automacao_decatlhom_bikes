@@ -14,11 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: INSTALL PACKAGES
-        run: |
-          sudo apt update -y
-          sudo apt-get install terraform -y
             
       - name: Configure AWS CLI
         if: always()

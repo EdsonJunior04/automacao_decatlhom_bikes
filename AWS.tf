@@ -39,13 +39,11 @@ resource "aws_instance" "ec2_instance_linux1" {
               cd sitebike
               mv ./* /var/www/html/
               cd /home/ec2-user/
-              sudo mkdir efs
-              sudo chmod 777 efs/
+              sudo mkdir /mnt/efs/
+              sudo chmod 777 /mnt/efs/
               sudo yum update && sudo yum install python3-pip
               sudo pip3 install botocore --upgrade
-              sudo touch id.txt
-              sudo echo ${aws_efs_file_system.decatlhombikescompa.id} > id.txt
-              sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} efs/
+              sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} /mnt/efs/
               EOF
 
   tags = {
@@ -76,12 +74,11 @@ resource "aws_instance" "ec2_instance_linux2" {
               cd sitebike
               mv ./* /var/www/html/
               cd /home/ec2-user/
-              sudo mkdir efs
-              sudo chmod 777 efs/
+              sudo mkdir /mnt/efs/
+              sudo chmod 777 /mnt/efs/
               sudo yum update && sudo yum install python3-pip
               sudo pip3 install botocore --upgrade
-              sudo echo ${aws_efs_file_system.decatlhombikescompa.id} > id.txt
-              sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} efs/
+              sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} /mnt/efs/
               EOF
 
   tags = {
