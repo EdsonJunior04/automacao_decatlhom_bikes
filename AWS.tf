@@ -15,6 +15,7 @@ resource "aws_efs_file_system" "decatlhombikescompa" {
 resource "aws_efs_mount_target" "decathlombikemount" {
   file_system_id = aws_efs_file_system.decatlhombikescompa.id
   subnet_id      = "subnet-0edbc11ff905813c6"
+  security_groups = [ aws_security_group.instance_sg.id ]
 }
 
 resource "aws_instance" "ec2_instance_linux1" {
@@ -28,7 +29,7 @@ resource "aws_instance" "ec2_instance_linux1" {
   user_data = <<-EOF
               #!/bin/bash
               yum -y update
-              yum install -y httpd git efs-utils
+              yum install -y httpd git amazon-efs-utils
               sudo systemctl enable httpd
               sudo systemctl start httpd
               cd /var/www/html/
@@ -63,7 +64,7 @@ resource "aws_instance" "ec2_instance_linux2" {
   user_data = <<-EOF
               #!/bin/bash
               yum -y update
-              yum install -y httpd git efs-utils
+              yum install -y httpd git amazon-efs-utils
               sudo systemctl enable httpd
               sudo systemctl start httpd
               cd /var/www/html/
