@@ -43,6 +43,8 @@ resource "aws_instance" "ec2_instance_linux1" {
               sudo chmod 777 efs/
               sudo yum update && sudo yum install python3-pip
               sudo pip3 install botocore --upgrade
+              sudo touch id.txt
+              sudo echo ${aws_efs_file_system.decatlhombikescompa.id} > id.txt
               sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} efs/
               EOF
 
@@ -78,6 +80,7 @@ resource "aws_instance" "ec2_instance_linux2" {
               sudo chmod 777 efs/
               sudo yum update && sudo yum install python3-pip
               sudo pip3 install botocore --upgrade
+              sudo echo ${aws_efs_file_system.decatlhombikescompa.id} > id.txt
               sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} efs/
               EOF
 
@@ -103,8 +106,8 @@ resource "aws_security_group" "instance_sg" {
   }
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
