@@ -38,7 +38,7 @@ resource "aws_instance" "ec2_instance_linux1" {
               git clone https://github.com/FofuxoSibov/sitebike.git
               cd sitebike
               mv ./* /var/www/html/
-
+              cd /home/ec2-user/
               sudo mkdir efs
               sudo chmod 777 efs/
               sudo yum update && sudo yum install python3-pip
@@ -73,7 +73,7 @@ resource "aws_instance" "ec2_instance_linux2" {
               git clone https://github.com/FofuxoSibov/sitebike.git
               cd sitebike
               mv ./* /var/www/html/
-
+              cd /home/ec2-user/
               sudo mkdir efs
               sudo chmod 777 efs/
               sudo yum update && sudo yum install python3-pip
