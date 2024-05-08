@@ -15,14 +15,13 @@ resource "aws_efs_file_system" "decatlhombikescompa" {
 resource "aws_efs_mount_target" "decathlombikemount" {
   file_system_id = aws_efs_file_system.decatlhombikescompa.id
   subnet_id      = "subnet-0edbc11ff905813c6"
-  security_groups = [ "sg-06759956f7227c919" ]
 }
 
 resource "aws_instance" "ec2_instance_linux1" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
-  vpc_security_group_ids = [ "sg-06759956f7227c919" ]
+  vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
 
   key_name = "MinhaChaveEdson"
 
@@ -56,8 +55,7 @@ resource "aws_instance" "ec2_instance_linux2" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
-  # vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
-  vpc_security_group_ids = [ "sg-06759956f7227c919" ]
+  vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
 
 
   key_name = "MinhaChaveEdson"
