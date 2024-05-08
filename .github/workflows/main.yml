@@ -1,0 +1,53 @@
+name: decathlom_bikes
+run-name: ${{ github.actor }} Pipeline Deploy 🙌
+on: 
+  push:
+    branches:
+      - "main"
+    paths-ignore:
+      - "docs/"
+      - "images/"
+      - "*.md"
+jobs:
+  githubactions-decathlom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: INSTALL PACKAGES
+        run: |
+          sudo apt update -y
+          sudo apt-get install figlet unzip -y
+          
+          sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+          wget -O- https://apt.releases.hashicorp.com/gpg | \
+            gpg --dearmor | \
+            sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+            https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+            sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+          sudo apt update -y
+          sudo apt-get install terraform -y
+            
+      - name: Configure AWS CLI
+        if: always()
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Test aws cli
+        if: always()
+        run: aws sts get-caller-identity
+        
+      - name: Terraform apply (CD)
+        if: always()
+        run: |
+          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c 1-5)
+          terraform init
+          terraform apply -var="github_sha=$COMMIT_SHA" --auto-approve
