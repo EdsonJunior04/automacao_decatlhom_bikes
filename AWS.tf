@@ -16,7 +16,7 @@ resource "aws_efs_file_system" "decatlhombikescompa" {
 resource "aws_instance" "ec2_instance_linux1" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
-  subnet_id              = "subnet-068bc90d5349e8efa" # ID da Subnet
+  subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
   vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
 
   key_name = "MinhaChaveEdson"
@@ -48,7 +48,7 @@ resource "aws_instance" "ec2_instance_linux1" {
 resource "aws_instance" "ec2_instance_linux2" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
-  subnet_id              = "subnet-068bc90d5349e8efa" # ID da Subnet
+  subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
   vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
 
 
@@ -83,7 +83,7 @@ resource "aws_instance" "ec2_instance_linux2" {
 resource "aws_security_group" "instance_sg" {
   name        = "instance_sg-5"
   description = "Allow SSH and HTTP inbound traffic"
-  vpc_id      = "vpc-031e71479d4c06df6"
+  vpc_id      = "vpc-0b8c2a1daea12cce1"
 
   ingress {
     from_port   = 22
@@ -113,7 +113,6 @@ resource "aws_security_group" "instance_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 
 output "public_ip_1" {
   description = "IP PUBLIC Maquina 1"
