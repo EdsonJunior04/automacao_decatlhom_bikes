@@ -49,8 +49,8 @@ resource "aws_instance" "ec2_instance_linux2" {
               #!/bin/bash
               yum -y update
               yum install -y httpd git efs-utils
-              sudo systemctl enable httpd
-              sudo systemctl start httpd
+              /usr/bin/systemctl enable httpd
+              /usr/bin/systemctl start httpd
               cd /var/www/html/
               rm index.html
               cd /home/ec2-user/
