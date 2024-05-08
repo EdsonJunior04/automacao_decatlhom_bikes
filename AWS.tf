@@ -7,17 +7,22 @@ provider "aws" {
 resource "aws_efs_file_system" "decatlhombikescompa" {
   creation_token = "decatlhombikescompa"
 
-
   tags = {
     Name = "decatlhombikescompa"
   }
+}
+
+resource "aws_efs_mount_target" "decathlombikemount" {
+  file_system_id = aws_efs_file_system.decatlhombikescompa.id
+  subnet_id      = "subnet-0edbc11ff905813c6"
+  security_groups = [ "sg-06759956f7227c919" ]
 }
 
 resource "aws_instance" "ec2_instance_linux1" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
-  vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
+  vpc_security_group_ids = [ "sg-06759956f7227c919" ]
 
   key_name = "MinhaChaveEdson"
 
@@ -35,8 +40,10 @@ resource "aws_instance" "ec2_instance_linux1" {
               mv ./* /var/www/html/
 
               sudo mkdir efs
+              sudo chmod 777 efs/
+              sudo yum update && sudo yum install python3-pip
+              sudo pip3 install botocore --upgrade
               sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} efs/
-
               EOF
 
   tags = {
@@ -49,7 +56,8 @@ resource "aws_instance" "ec2_instance_linux2" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
-  vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
+  # vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
+  vpc_security_group_ids = [ "sg-06759956f7227c919" ]
 
 
   key_name = "MinhaChaveEdson"
@@ -58,8 +66,8 @@ resource "aws_instance" "ec2_instance_linux2" {
               #!/bin/bash
               yum -y update
               yum install -y httpd git efs-utils
-              /usr/bin/systemctl enable httpd
-              /usr/bin/systemctl start httpd
+              sudo systemctl enable httpd
+              sudo systemctl start httpd
               cd /var/www/html/
               rm index.html
               cd /home/ec2-user/
@@ -68,6 +76,9 @@ resource "aws_instance" "ec2_instance_linux2" {
               mv ./* /var/www/html/
 
               sudo mkdir efs
+              sudo chmod 777 efs/
+              sudo yum update && sudo yum install python3-pip
+              sudo pip3 install botocore --upgrade
               sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} efs/
               EOF
 
@@ -116,15 +127,15 @@ resource "aws_security_group" "instance_sg" {
 
 output "public_ip_1" {
   description = "IP PUBLIC Maquina 1"
-  value = aws_instance.ec2_instance_linux1.public_ip
+  value       = aws_instance.ec2_instance_linux1.public_ip
 }
 
 output "public_ip_2" {
   description = "IP PUBLIC Maquina 2"
-  value = aws_instance.ec2_instance_linux2.public_ip
+  value       = aws_instance.ec2_instance_linux2.public_ip
 }
 
 output "name" {
   description = "Id do EFS"
-  value = aws_efs_file_system.decatlhombikescompa.id
+  value       = aws_efs_file_system.decatlhombikescompa.id
 }
