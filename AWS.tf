@@ -4,6 +4,15 @@ provider "aws" {
   shared_credentials_files = ["./aws/config"]
 }
 
+resource "aws_efs_file_system" "decatlhombikescompa" {
+  creation_token = "decatlhombikescompa"
+
+
+  tags = {
+    Name = "decatlhombikescompa"
+  }
+}
+
 resource "aws_instance" "ec2_instance_linux1" {
   ami                    = "ami-07caf09b362be10b8"
   instance_type          = "t2.micro"
@@ -105,24 +114,18 @@ resource "aws_security_group" "instance_sg" {
   }
 }
 
-resource "aws_efs_file_system" "decatlhombikescompa" {
-  creation_token = "decatlhombikescompa"
-
-
-  tags = {
-    Name = "decatlhombikescompa"
-  }
-}
-
 output "public_ip_1" {
+  description = "IP PUBLIC Maquina 1"
   value = aws_instance.ec2_instance_linux1.public_ip
 }
 
 output "public_ip_2" {
+  description = "IP PUBLIC Maquina 2"
   value = aws_instance.ec2_instance_linux2.public_ip
 }
 
 output "name" {
+  description = "Id do EFS"
   value = aws_efs_file_system.decatlhombikescompa.id
 }
 
