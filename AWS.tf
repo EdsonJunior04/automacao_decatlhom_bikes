@@ -23,6 +23,7 @@ resource "aws_instance" "ec2_instance_linux1" {
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
   vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
+  depends_on = [ aws_efs_mount_target.decathlombikemount ]
 
   key_name = "MinhaChaveEdson"
 
@@ -57,7 +58,7 @@ resource "aws_instance" "ec2_instance_linux2" {
   instance_type          = "t2.micro"
   subnet_id              = "subnet-0edbc11ff905813c6" # ID da Subnet
   vpc_security_group_ids = ["${aws_security_group.instance_sg.id}"]
-
+  depends_on = [ aws_efs_mount_target.decathlombikemount ]
 
   key_name = "MinhaChaveEdson"
 
