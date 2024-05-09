@@ -32,6 +32,6 @@ jobs:
         run: |
           echo "$KEY_PATH" > ./chave.pem
           chmod 600 ./chave.pem
-          scp -i ./chave.pem images/*.* ec2-user@$(terraform output -raw public_ip_1):/mnt/efs
+          scp -i ./chave.pem images/*.* ec2-user@${""}:/mnt/efs
         env:
           KEY_PATH: ${{ secrets.CHAVE_PEM }}
