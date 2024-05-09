@@ -1,0 +1,37 @@
+name: automacao_efs
+run-name: EFS
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - images/**
+      - .github/workflows/images.yml
+jobs:
+  efs-senai:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalação do SSH
+        run: sudo apt-get install -y openssh-client
+
+      - name: Verificação da chave pem
+        run: echo "$KEY_PATH"
+        env:
+          KEY_PATH: ${{ secrets.CHAVE_PEM }}
+
+      - name: Adicionar host EC2 ao know_hosts
+        run: |
+          ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''
+          ssh-keyscan -H $(terraform output -raw public_ip_1) >> ~/.ssh/known_hosts
+
+      - name: Envio das imagens SCP
+        if: always()
+        run: |
+          echo "$KEY_PATH" > ./chave.pem
+          chmod 600 ./chave.pem
+          scp -i ./chave.pem images/*.* ec2-user@$(terraform output -raw public_ip_1):/mnt/efs
+        env:
+          KEY_PATH: ${{ secrets.CHAVE_PEM }}

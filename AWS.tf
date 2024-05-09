@@ -80,6 +80,7 @@ resource "aws_instance" "ec2_instance_linux2" {
               sudo yum update && sudo yum install python3-pip
               sudo pip3 install botocore --upgrade
               sudo mount -t efs ${aws_efs_file_system.decatlhombikescompa.id} /mnt/efs/
+              sudo chmod 777 /mnt/efs/
               EOF
 
   tags = {
@@ -123,19 +124,4 @@ resource "aws_security_group" "instance_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-output "public_ip_1" {
-  description = "IP PUBLIC Maquina 1"
-  value       = aws_instance.ec2_instance_linux1.public_ip
-}
-
-output "public_ip_2" {
-  description = "IP PUBLIC Maquina 2"
-  value       = aws_instance.ec2_instance_linux2.public_ip
-}
-
-output "name" {
-  description = "Id do EFS"
-  value       = aws_efs_file_system.decatlhombikescompa.id
 }

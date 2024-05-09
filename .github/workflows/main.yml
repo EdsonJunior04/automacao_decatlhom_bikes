@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - "main"
-    paths-ignore:
-      - "docs/"
-      - "images/"
-      - "*.md"
+    paths:
+      - "*.tf"
+      - .github/workflows/main.yml
 jobs:
   githubactions-decathlom:
     runs-on: ubuntu-latest
